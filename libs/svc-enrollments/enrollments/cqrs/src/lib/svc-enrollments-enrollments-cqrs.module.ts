@@ -4,8 +4,10 @@ import { CreateEnrollmentHandler } from './create-enrollment/create-enrollment.h
 import { DeleteEnrollmentHandler } from './delete-enrollment/delete-enrollment.handler';
 import { DescribeEnrollmentHandler } from './describe-enrollment/describe-enrollment.handler';
 import { ListPersonEnrollmentsHandler } from './list-person-enrollments/list-person-enrollments.handler';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
+  imports: [CqrsModule],
   providers: [
     ListPersonEnrollmentsHandler,
     ListRosterEnrollmentsHandler,
@@ -14,6 +16,7 @@ import { ListPersonEnrollmentsHandler } from './list-person-enrollments/list-per
     DeleteEnrollmentHandler,
   ],
   exports: [
+    CqrsModule,
     ListPersonEnrollmentsHandler,
     ListRosterEnrollmentsHandler,
     CreateEnrollmentHandler,

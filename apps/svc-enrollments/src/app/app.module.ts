@@ -5,15 +5,18 @@ import { AppService } from './app.service';
 import { SvcEnrollmentsEnrollmentsAppModule } from '@aplus/svc-enrollments/enrollments/app';
 import { APP_PIPE } from '@nestjs/core';
 import { DynamoDbModule } from './dynamodb.module';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
-  imports: [DynamoDbModule, SvcEnrollmentsEnrollmentsAppModule],
+  imports: [CqrsModule, DynamoDbModule, SvcEnrollmentsEnrollmentsAppModule],
   controllers: [AppController],
   providers: [
     AppService,
     {
       provide: APP_PIPE,
-      useValue: new ValidationPipe(),
+      useValue: new ValidationPipe({
+        transform: true,
+      }),
     },
   ],
 })

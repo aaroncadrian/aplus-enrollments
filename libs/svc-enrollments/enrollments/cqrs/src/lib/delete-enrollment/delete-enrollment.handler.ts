@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { DeleteEnrollmentCommandInput } from './delete-enrollment.command-input';
 import { DeleteEnrollmentCommandOutput } from './delete-enrollment.command-output';
 import {
@@ -13,16 +13,23 @@ import invariant from 'tiny-invariant';
 import { getEnrollmentKey } from '../_internal/enrollment.keys';
 import { getEnrollmentPersonKey } from '../_internal/roster-enrollment-person.keys';
 import { getRosterEnrollmentLimitTrackerKey } from '../_internal/roster-enrollment-limit-tracker.keys';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-@Injectable()
-export class DeleteEnrollmentHandler {
+@CommandHandler(DeleteEnrollmentCommandInput)
+export class DeleteEnrollmentHandler
+  implements
+    ICommandHandler<
+      DeleteEnrollmentCommandInput,
+      DeleteEnrollmentCommandOutput
+    >
+{
   constructor(
     private dynamo: DynamoDBClient,
     @Inject(ENROLLMENTS_TABLE_NAME)
     private enrollmentsTableName: string
   ) {}
 
-  public async handle(
+  public async execute(
     input: DeleteEnrollmentCommandInput
   ): Promise<DeleteEnrollmentCommandOutput> {
     const { rosterGroupId, rosterId, enrollmentId } = input;

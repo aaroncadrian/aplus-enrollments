@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { ListPersonEnrollmentsCommandInput } from './list-person-enrollments.command-input';
 import { ListPersonEnrollmentsCommandOutput } from './list-person-enrollments.command-output';
 import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
@@ -9,9 +9,16 @@ import {
   LIST_PERSON_ENROLLMENTS_INDEX_NAME,
 } from '@aplus/svc-enrollments/config/util-tokens';
 import { getPersonEnrollmentKey } from '../_internal/person-enrollment.keys';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-@Injectable()
-export class ListPersonEnrollmentsHandler {
+@CommandHandler(ListPersonEnrollmentsCommandInput)
+export class ListPersonEnrollmentsHandler
+  implements
+    ICommandHandler<
+      ListPersonEnrollmentsCommandInput,
+      ListPersonEnrollmentsCommandOutput
+    >
+{
   constructor(
     private dynamo: DynamoDBClient,
     @Inject(ENROLLMENTS_TABLE_NAME)
@@ -20,7 +27,7 @@ export class ListPersonEnrollmentsHandler {
     private listPersonEnrollmentsIndexName: string
   ) {}
 
-  public async handle(
+  public async execute(
     input: ListPersonEnrollmentsCommandInput
   ): Promise<ListPersonEnrollmentsCommandOutput> {
     const { personId } = input;

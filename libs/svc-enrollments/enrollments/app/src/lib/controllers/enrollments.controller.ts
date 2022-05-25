@@ -1,53 +1,43 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import {
   CreateEnrollmentCommandInput,
-  CreateEnrollmentHandler,
   DeleteEnrollmentCommandInput,
-  DeleteEnrollmentHandler,
   DescribeEnrollmentCommandInput,
-  DescribeEnrollmentHandler,
   ListPersonEnrollmentsCommandInput,
-  ListPersonEnrollmentsHandler,
   ListRosterEnrollmentsCommandInput,
-  ListRosterEnrollmentsHandler,
 } from '@aplus/svc-enrollments/enrollments/cqrs';
+import { CommandBus } from '@nestjs/cqrs';
 
 @Controller()
 export class EnrollmentsController {
-  constructor(
-    private listPersonEnrollmentsHandler: ListPersonEnrollmentsHandler,
-    private listRosterEnrollmentsHandler: ListRosterEnrollmentsHandler,
-    private createEnrollmentHandler: CreateEnrollmentHandler,
-    private describeEnrollmentHandler: DescribeEnrollmentHandler,
-    private deleteEnrollmentHandler: DeleteEnrollmentHandler
-  ) {}
+  constructor(private commandBus: CommandBus) {}
 
   @Post('ListPersonEnrollments')
   public ListPersonEnrollments(
     @Body() input: ListPersonEnrollmentsCommandInput
   ) {
-    return this.listPersonEnrollmentsHandler.handle(input);
+    return this.commandBus.execute(input);
   }
 
   @Post('ListRosterEnrollments')
   public ListRosterEnrollments(
     @Body() input: ListRosterEnrollmentsCommandInput
   ) {
-    return this.listRosterEnrollmentsHandler.handle(input);
+    return this.commandBus.execute(input);
   }
 
   @Post('CreateEnrollment')
   public CreateEnrollment(@Body() input: CreateEnrollmentCommandInput) {
-    return this.createEnrollmentHandler.handle(input);
+    return this.commandBus.execute(input);
   }
 
   @Post('DescribeEnrollment')
   public DescribeEnrollment(@Body() input: DescribeEnrollmentCommandInput) {
-    return this.describeEnrollmentHandler.handle(input);
+    return this.commandBus.execute(input);
   }
 
   @Post('DeleteEnrollment')
   public DeleteEnrollment(@Body() input: DeleteEnrollmentCommandInput) {
-    return this.deleteEnrollmentHandler.handle(input);
+    return this.commandBus.execute(input);
   }
 }

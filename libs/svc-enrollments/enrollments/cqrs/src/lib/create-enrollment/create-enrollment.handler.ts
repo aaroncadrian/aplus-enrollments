@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { CreateEnrollmentCommandInput } from './create-enrollment.command-input';
 import { CreateEnrollmentCommandOutput } from './create-enrollment.command-output';
 import {
@@ -13,16 +13,23 @@ import { getEnrollmentPersonKey } from '../_internal/roster-enrollment-person.ke
 import { getEnrollmentKey } from '../_internal/enrollment.keys';
 import { getRosterEnrollmentLimitTrackerKey } from '../_internal/roster-enrollment-limit-tracker.keys';
 import { getPersonEnrollmentKey } from '../_internal/person-enrollment.keys';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-@Injectable()
-export class CreateEnrollmentHandler {
+@CommandHandler(CreateEnrollmentCommandInput)
+export class CreateEnrollmentHandler
+  implements
+    ICommandHandler<
+      CreateEnrollmentCommandInput,
+      CreateEnrollmentCommandOutput
+    >
+{
   constructor(
     private dynamo: DynamoDBClient,
     @Inject(ENROLLMENTS_TABLE_NAME)
     private enrollmentsTableName: string
   ) {}
 
-  public async handle(
+  public async execute(
     input: CreateEnrollmentCommandInput
   ): Promise<CreateEnrollmentCommandOutput> {
     const { rosterGroupId, rosterId, personId } = input;

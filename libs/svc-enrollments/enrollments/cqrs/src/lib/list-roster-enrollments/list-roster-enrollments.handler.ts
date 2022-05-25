@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { ListRosterEnrollmentsCommandInput } from './list-roster-enrollments.command-input';
 import { ListRosterEnrollmentsCommandOutput } from './list-roster-enrollments.command-output';
 import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
@@ -6,16 +6,23 @@ import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { Enrollment } from '@aplus/svc-enrollments/enrollments/domain';
 import { ENROLLMENTS_TABLE_NAME } from '@aplus/svc-enrollments/config/util-tokens';
 import { getEnrollmentPk } from '../_internal/enrollment.keys';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-@Injectable()
-export class ListRosterEnrollmentsHandler {
+@CommandHandler(ListRosterEnrollmentsCommandInput)
+export class ListRosterEnrollmentsHandler
+  implements
+    ICommandHandler<
+      ListRosterEnrollmentsCommandInput,
+      ListRosterEnrollmentsCommandOutput
+    >
+{
   constructor(
     private dynamo: DynamoDBClient,
     @Inject(ENROLLMENTS_TABLE_NAME)
     private enrollmentsTableName: string
   ) {}
 
-  public async handle(
+  public async execute(
     input: ListRosterEnrollmentsCommandInput
   ): Promise<ListRosterEnrollmentsCommandOutput> {
     const { rosterGroupId, rosterId } = input;
