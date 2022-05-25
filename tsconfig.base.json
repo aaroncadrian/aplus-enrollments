@@ -14,7 +14,20 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@aplus/svc-enrollments/config/util-tokens": [
+        "libs/svc-enrollments/config/util-tokens/src/index.ts"
+      ],
+      "@aplus/svc-enrollments/enrollments/app": [
+        "libs/svc-enrollments/enrollments/app/src/index.ts"
+      ],
+      "@aplus/svc-enrollments/enrollments/cqrs": [
+        "libs/svc-enrollments/enrollments/cqrs/src/index.ts"
+      ],
+      "@aplus/svc-enrollments/enrollments/domain": [
+        "libs/svc-enrollments/enrollments/domain/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

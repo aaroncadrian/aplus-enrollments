@@ -2,6 +2,10 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
-    "svc-enrollments": "apps/svc-enrollments"
+    "svc-enrollments": "apps/svc-enrollments",
+    "svc-enrollments-config-util-tokens": "libs/svc-enrollments/config/util-tokens",
+    "svc-enrollments-enrollments-app": "libs/svc-enrollments/enrollments/app",
+    "svc-enrollments-enrollments-cqrs": "libs/svc-enrollments/enrollments/cqrs",
+    "svc-enrollments-enrollments-domain": "libs/svc-enrollments/enrollments/domain"
   }
 }
