@@ -8,7 +8,7 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/svc-enrollments",
-        "main": "apps/svc-enrollments/src/main.ts",
+        "main": "apps/svc-enrollments/src/local-entry-point.ts",
         "tsConfig": "apps/svc-enrollments/tsconfig.app.json",
         "assets": ["apps/svc-enrollments/src/assets"]
       },
@@ -17,6 +17,13 @@
           "optimization": true,
           "extractLicenses": true,
           "inspect": false,
+          "main": "apps/svc-enrollments/src/lambda-entry-point.ts",
+          "externalDependencies": [
+            "cache-manager",
+            "@nestjs/websockets/socket-module",
+            "@nestjs/microservices/microservices-module",
+            "@nestjs/microservices"
+          ],
           "fileReplacements": [
             {
               "replace": "apps/svc-enrollments/src/environments/environment.ts",
