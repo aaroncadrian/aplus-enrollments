@@ -4,12 +4,10 @@ data "aws_iam_policy_document" "lambda_policy" {
   version = "2012-10-17"
 
   statement {
+    sid = "Stmt1653462078687"
+
     actions = [
-      "dynamodb:Query",
-      "dynamodb:GetItem",
-      "dynamodb:PutItem",
-      "dynamodb:UpdateItem",
-      "dynamodb:DeleteItem",
+      "dynamodb:*",
     ]
 
     effect = "Allow"
