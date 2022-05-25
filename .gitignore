@@ -41,5 +41,5 @@ Thumbs.db
 # Terraform
 **/.terraform/
 **/*.tfstate
-**/*.tfstate.backup
+**/*.tfstate.*
 *.zip
