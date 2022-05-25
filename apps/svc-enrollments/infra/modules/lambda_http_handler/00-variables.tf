@@ -14,3 +14,7 @@ variable "enrollments_table_arn" {
 variable "http_handler_source_file" {
   type = string
 }
+
+variable "list_person_enrollments_index_name" {
+  type = string
+}

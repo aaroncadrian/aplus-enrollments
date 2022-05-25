@@ -24,8 +24,7 @@ resource "aws_lambda_function" "http_handler" {
   environment {
     variables = {
       ENROLLMENTS_TABLE_NAME             = var.enrollments_table_name
-      # TODO: Take gsi as variable
-      LIST_PERSON_ENROLLMENTS_INDEX_NAME = "gsi1"
+      LIST_PERSON_ENROLLMENTS_INDEX_NAME = var.list_person_enrollments_index_name
     }
   }
 }

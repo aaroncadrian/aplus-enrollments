@@ -1,5 +1,9 @@
 #region DynamoDB
 
+locals {
+  dynamodb_gsi1_name = "gsi1"
+}
+
 resource "aws_dynamodb_table" "enrollments_table" {
   hash_key  = "pk"
   range_key = "sk"
@@ -17,6 +21,17 @@ resource "aws_dynamodb_table" "enrollments_table" {
     name = "sk"
     type = "S"
   }
+
+  attribute {
+    name = "gsi1pk"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name            = local.dynamodb_gsi1_name
+    hash_key        = "gsi1pk"
+    projection_type = "ALL"
+  }
 }
 
 #endregion
@@ -24,11 +39,12 @@ resource "aws_dynamodb_table" "enrollments_table" {
 #region Lambda HTTP Handler
 
 module "svc_enrollments_http_handler" {
-  source                   = "./modules/lambda_http_handler"
-  http_handler_source_file = "${path.module}/../../../dist/apps/svc-enrollments/main.js"
-  environment_name         = var.environment_name
-  enrollments_table_arn    = aws_dynamodb_table.enrollments_table.arn
-  enrollments_table_name   = aws_dynamodb_table.enrollments_table.name
+  source                             = "./modules/lambda_http_handler"
+  http_handler_source_file           = "${path.module}/../../../dist/apps/svc-enrollments/main.js"
+  environment_name                   = var.environment_name
+  enrollments_table_arn              = aws_dynamodb_table.enrollments_table.arn
+  enrollments_table_name             = aws_dynamodb_table.enrollments_table.name
+  list_person_enrollments_index_name = local.dynamodb_gsi1_name
 }
 #endregion
 
